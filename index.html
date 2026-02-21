@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="System override terminal — solve the puzzle to unlock your reward." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>SYSTEM OVERRIDE // QUEST</title>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- MathJax for formula rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      startup: {
+        ready: () => {
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+</head>
+<body>
+
+  <!-- Matrix Rain Background -->
+  <canvas id="matrix-canvas" class="matrix-bg" aria-hidden="true"></canvas>
+
+  <div class="container">
+
+    <!-- Terminal Chrome -->
+    <div class="terminal-header">
+      <span class="terminal-dot red"></span>
+      <span class="terminal-dot yellow"></span>
+      <span class="terminal-dot green"></span>
+      <span class="terminal-title">root@quest-node:~</span>
+    </div>
+
+    <div class="terminal-body" id="terminal-body">
+
+      <!-- Status Line -->
+      <div class="status-line">
+        <span class="status-indicator locked" id="status-indicator"></span>
+        <span id="status-text">ENCRYPTION ACTIVE</span>
+      </div>
+
+      <!-- ===================== LOCKED STATE ===================== -->
+      <div id="locked-section">
+
+        <h1 class="glitch-title">System Overheat</h1>
+
+        <p class="typewriter" id="typewriter-text"
+           data-text="Обнаружена зашифрованная передача...">
+        </p>
+
+        <div class="description">
+          <p><span class="prompt-symbol">$</span> Критическая система заблокирована.</p>
+          <p><span class="prompt-symbol">$</span> Для разблокировки введите код дешифровки.</p>
+          <p><span class="prompt-symbol">$</span> Реши уравнение, чтобы получить доступ.</p>
+        </div>
+
+        <!-- Puzzle -->
+        <div class="puzzle-box">
+          <div class="puzzle-label">// Encryption Key Formula</div>
+          <div class="puzzle-formula" id="puzzle-formula">
+            $$ x = 2^{10} + 976 $$
+          </div>
+          <div class="puzzle-hint">Вычисли значение x</div>
+        </div>
+
+        <!-- Input -->
+        <div class="input-group">
+          <input
+            type="text"
+            id="code-input"
+            class="code-input"
+            placeholder="ENTER CODE"
+            autocomplete="off"
+            inputmode="numeric"
+            maxlength="10"
+            aria-label="Decryption code input"
+          />
+          <button id="submit-btn" class="submit-btn" aria-label="Submit answer">
+            EXEC
+          </button>
+        </div>
+
+        <!-- Error -->
+        <div class="error-msg" id="error-msg" role="alert" aria-live="polite"></div>
+
+        <!-- Progress bar (shown on correct answer) -->
+        <div class="progress-bar-container" id="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- Attempt counter -->
+        <div class="attempt-counter" id="attempt-counter"></div>
+
+      </div>
+      <!-- end locked-section -->
+
+      <!-- ===================== UNLOCKED STATE ===================== -->
+      <div id="unlocked-section">
+
+        <h2 class="grant-title">Access Granted</h2>
+        <p class="grant-subtitle">Digital Voucher Activated</p>
+
+        <div class="voucher-card">
+          <div class="voucher-amount">4 000 ₽</div>
+          <div class="voucher-label">Лимит на цифровые удовольствия</div>
+
+          <div class="info-item">
+            <span class="info-icon">🎮</span>
+            <p class="info-text">
+              Этого хватит на покупку <span class="highlight">Civilization VII</span>
+              (~3 599 ₽) или любые подписки на <span class="highlight-blue">GGSel</span>.
+            </p>
+          </div>
+
+          <div class="info-item">
+            <span class="info-icon">🛒</span>
+            <p class="info-text">
+              Выбирай <span class="highlight">любую игру</span> или сервис — лимит твой!
+            </p>
+          </div>
+
+          <div class="info-item">
+            <span class="info-icon">⚡</span>
+            <p class="info-text">
+              <span class="highlight">Инструкция:</span> выбери любую игру или сервис,
+              скинь мне ссылку — я оплачу мгновенно!
+            </p>
+          </div>
+        </div>
+
+        <div class="instruction-box">
+          <div class="instruction-title">// How to redeem</div>
+          <p class="instruction-text">
+            <span style="color: var(--neon-green);">1.</span> Найди игру или подписку<br />
+            <span style="color: var(--neon-green);">2.</span> Скинь ссылку мне<br />
+            <span style="color: var(--neon-green);">3.</span> Получи оплату мгновенно ⚡
+          </p>
+        </div>
+
+      </div>
+      <!-- end unlocked-section -->
+
+      <!-- Footer -->
+      <div class="footer">
+        <p class="footer-text">[ QUEST NODE v2.3.0 // С Днём Рождения! 🎉 ]</p>
+      </div>
+
+    </div>
+    <!-- end terminal-body -->
+
+  </div>
+  <!-- end container -->
+
+  <!-- Main Script -->
+  <script src="script.js"></script>
+
+</body>
+</html>

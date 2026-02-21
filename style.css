@@ -1,0 +1,687 @@
+/* ============================================
+   HACKER QUEST — Dark Terminal Theme
+   Mobile-first, Monospace, Neon Green
+   ============================================ */
+
+/* --- Google Fonts: JetBrains Mono --- */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+/* --- CSS Custom Properties --- */
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #0f0f0f;
+  --bg-card: #111111;
+  --bg-input: #0d0d0d;
+  --neon-green: #00ff41;
+  --neon-green-dim: #00cc33;
+  --neon-green-glow: rgba(0, 255, 65, 0.15);
+  --neon-green-glow-strong: rgba(0, 255, 65, 0.4);
+  --neon-red: #ff0040;
+  --neon-red-glow: rgba(255, 0, 64, 0.3);
+  --neon-blue: #00d4ff;
+  --neon-blue-glow: rgba(0, 212, 255, 0.15);
+  --text-primary: #c8c8c8;
+  --text-secondary: #666666;
+  --text-dim: #3a3a3a;
+  --border-color: #1a1a1a;
+  --border-glow: #00ff4133;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.4s ease;
+  --transition-slow: 0.8s ease;
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-mono);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  position: relative;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- CRT Scanline Overlay --- */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+/* --- Ambient glow on body --- */
+body::after {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    var(--neon-green-glow) 0%,
+    transparent 50%
+  );
+  opacity: 0.3;
+}
+
+/* --- Main Container --- */
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Terminal Header Bar --- */
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px 6px 0 0;
+  background: var(--bg-card);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red { background: #ff5f57; }
+.terminal-dot.yellow { background: #febc2e; }
+.terminal-dot.green { background: #28c840; }
+
+.terminal-title {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+/* --- Terminal Body --- */
+.terminal-body {
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 1.5rem 1.25rem;
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--neon-green-dim),
+    transparent
+  );
+  opacity: 0.4;
+}
+
+/* --- Status Badge --- */
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: 0 0 6px var(--neon-green), 0 0 12px var(--neon-green-glow);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-indicator.locked {
+  background: var(--neon-red);
+  box-shadow: 0 0 6px var(--neon-red), 0 0 12px var(--neon-red-glow);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* --- Section: Locked State --- */
+#locked-section {
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+#locked-section.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+}
+
+/* --- Glitch Title --- */
+.glitch-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  text-shadow:
+    0 0 7px var(--neon-green),
+    0 0 20px var(--neon-green-glow),
+    0 0 40px var(--neon-green-glow);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  animation: glitch-flicker 4s infinite;
+}
+
+@keyframes glitch-flicker {
+  0%, 93%, 95%, 97%, 100% { opacity: 1; }
+  94% { opacity: 0.8; transform: translateX(2px); }
+  96% { opacity: 0.9; transform: translateX(-1px); }
+}
+
+/* --- Typing effect --- */
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--neon-green);
+  animation: typing 2.5s steps(30, end) forwards, blink-caret 0.75s step-end infinite;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  max-width: fit-content;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: var(--neon-green); }
+  50% { border-color: transparent; }
+}
+
+/* --- Description Text --- */
+.description {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.description .prompt-symbol {
+  color: var(--neon-green);
+  margin-right: 4px;
+}
+
+/* --- Puzzle Section --- */
+.puzzle-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.puzzle-box::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 6px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--neon-green-glow), transparent, var(--neon-blue-glow));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.puzzle-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--neon-green-dim);
+  margin-bottom: 0.75rem;
+}
+
+.puzzle-formula {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  padding: 0.75rem 0;
+}
+
+/* MathJax override for color */
+.puzzle-formula .MathJax {
+  color: var(--text-primary) !important;
+}
+
+.puzzle-hint {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+  font-style: italic;
+}
+
+/* --- Input Group --- */
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.code-input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--neon-green);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  caret-color: var(--neon-green);
+  letter-spacing: 3px;
+  text-align: center;
+}
+
+.code-input::placeholder {
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+}
+
+.code-input:focus {
+  border-color: var(--neon-green-dim);
+  box-shadow: 0 0 0 2px var(--neon-green-glow), inset 0 0 20px rgba(0, 255, 65, 0.03);
+}
+
+.submit-btn {
+  background: transparent;
+  border: 1px solid var(--neon-green-dim);
+  border-radius: 4px;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--neon-green);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--neon-green-glow), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+.submit-btn:hover {
+  background: var(--neon-green-glow);
+  box-shadow: 0 0 15px var(--neon-green-glow);
+}
+
+.submit-btn:active {
+  transform: scale(0.97);
+}
+
+/* --- Error Message --- */
+.error-msg {
+  font-size: 0.75rem;
+  color: var(--neon-red);
+  text-shadow: 0 0 8px var(--neon-red-glow);
+  min-height: 1.2em;
+  transition: opacity var(--transition-fast);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.error-msg.visible {
+  opacity: 1;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* =============================================
+   Section: Unlocked State
+   ============================================= */
+#unlocked-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+}
+
+#unlocked-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  position: relative;
+  visibility: visible;
+}
+
+/* --- Grant Title --- */
+.grant-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  text-shadow:
+    0 0 10px var(--neon-green),
+    0 0 30px var(--neon-green-glow),
+    0 0 60px var(--neon-green-glow);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.grant-subtitle {
+  font-size: 0.75rem;
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px var(--neon-blue-glow);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* --- Voucher Card --- */
+.voucher-card {
+  background: linear-gradient(
+    145deg,
+    var(--bg-card) 0%,
+    #0d1117 50%,
+    var(--bg-card) 100%
+  );
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem 1.25rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.voucher-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 8px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--neon-green) 0%,
+    transparent 30%,
+    transparent 70%,
+    var(--neon-blue) 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.voucher-amount {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  text-align: center;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 0 15px var(--neon-green-glow-strong);
+  letter-spacing: 2px;
+}
+
+.voucher-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Info Items --- */
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 255, 65, 0.02);
+  border-radius: 4px;
+  border-left: 2px solid var(--neon-green-dim);
+}
+
+.info-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.info-text {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+}
+
+.info-text .highlight {
+  color: var(--neon-green);
+  font-weight: 500;
+}
+
+.info-text .highlight-blue {
+  color: var(--neon-blue);
+  font-weight: 500;
+}
+
+/* --- Instruction Box --- */
+.instruction-box {
+  background: var(--bg-primary);
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.instruction-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--neon-blue);
+  margin-bottom: 0.5rem;
+}
+
+.instruction-text {
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+/* --- Decorative Matrix Rain (background) --- */
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+/* --- Progress Bar (loading effect) --- */
+.progress-bar-container {
+  width: 100%;
+  height: 2px;
+  background: var(--bg-primary);
+  border-radius: 1px;
+  margin-top: 1rem;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.progress-bar-container.active {
+  opacity: 1;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  border-radius: 1px;
+  transition: width 1.5s ease;
+}
+
+.progress-bar.complete {
+  width: 100%;
+}
+
+/* --- Footer --- */
+.footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* --- Responsive adjustments --- */
+@media (min-width: 480px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .glitch-title {
+    font-size: 1.5rem;
+  }
+
+  .voucher-amount {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 360px) {
+  html {
+    font-size: 14px;
+  }
+
+  .glitch-title {
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+  }
+
+  .code-input {
+    padding: 0.65rem 0.75rem;
+    letter-spacing: 2px;
+  }
+}
+
+/* --- Utility: Hidden --- */
+.hidden {
+  display: none !important;
+}
+
+/* --- Success flash animation --- */
+@keyframes success-flash {
+  0% { background-color: var(--bg-secondary); }
+  15% { background-color: rgba(0, 255, 65, 0.06); }
+  100% { background-color: var(--bg-secondary); }
+}
+
+.terminal-body.success-flash {
+  animation: success-flash 1.5s ease;
+}
+
+/* --- Attempt counter style --- */
+.attempt-counter {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-top: 0.5rem;
+  text-align: right;
+}
